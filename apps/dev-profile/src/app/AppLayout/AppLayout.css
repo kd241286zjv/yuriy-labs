@@ -1,0 +1,13 @@
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #e5e7eb;
+}
+
+.content {
+  padding: 2rem;
+}

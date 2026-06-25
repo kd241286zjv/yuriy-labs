@@ -1,10 +1,7 @@
-import { AppLayout } from '../shared/ui/AppLayout';
-import { HomePage } from '../pages/Home';
+import { AppLayout } from './AppLayout';
+import { Navigation } from '../navigation';
+import { navigationItems } from '../navigation';
 
-export default function App() {
-  return (
-    <AppLayout>
-      <HomePage />
-    </AppLayout>
-  );
+export function App() {
+  return <AppLayout navigation={<Navigation items={navigationItems} />}></AppLayout>;
 }
