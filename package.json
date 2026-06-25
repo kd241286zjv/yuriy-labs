@@ -6,22 +6,31 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,mts,cts,vue}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,yml,yaml,md}": [
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "packageManager": "pnpm@11.9.0",
   "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.9.0",
-      "onFail": "download"
-    },
-    "engines": {
-      "node": ">=24"
+    "runtime": {
+      "name": "node",
+      "version": ">=24"
     }
   },
   "type": "module",
@@ -29,10 +38,14 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.7.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "prettier": "^3.8.4",
     "turbo": "^2.9.18",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.0"
+    "typescript-eslint": "^8.62.0",
+    "vue-eslint-parser": "^10.4.1"
   }
 }

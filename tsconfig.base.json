@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* Language */
+    "target": "ES2024",
+    "lib": ["ES2024"],
+
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Modern TS */
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* DX */
+    "skipLibCheck": true,
+
+    /* Emit */
+    "noEmit": true
+  }
+}
