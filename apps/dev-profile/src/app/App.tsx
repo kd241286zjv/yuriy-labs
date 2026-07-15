@@ -1,7 +1,11 @@
-import { AppLayout } from './AppLayout';
-import { Navigation } from '../navigation';
-import { navigationItems } from '../navigation';
+import { AppLayout } from '@/app/AppLayout';
+import { Navigation, navigationItems } from '@/navigation';
+import { Profile, profile } from '@/profile/profile';
 
 export function App() {
-  return <AppLayout navigation={<Navigation items={navigationItems} />}></AppLayout>;
+  return (
+    <AppLayout navigation={<Navigation items={navigationItems} />}>
+      <Profile profile={profile} />
+    </AppLayout>
+  );
 }

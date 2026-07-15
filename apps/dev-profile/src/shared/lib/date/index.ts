@@ -1,0 +1,1 @@
+export { formatEmploymentPeriod } from './formatEmploymentPeriod';

@@ -1,5 +1,7 @@
+import type { SectionId } from '@/shared/navigation';
+
 export interface NavigationItem {
-  id: string;
+  id: SectionId;
   label: string;
 }
 
@@ -11,10 +13,6 @@ export const navigationItems: NavigationItem[] = [
   {
     id: 'experience',
     label: 'Experience',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
   },
   {
     id: 'skills',

@@ -1,24 +1,6 @@
-:root {
-  color-scheme: light;
+@import "tailwindcss";
+@import "@/app/styles/print.css";
 
-  font-family:
-    Inter,
-    system-ui,
-    sans-serif;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  height: 100%;
-}
-
-body {
-  margin: 0;
+html {
+  scroll-behavior: smooth;
 }
