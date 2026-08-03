@@ -1,12 +1,22 @@
 # AGENTS.md
 
+## Purpose
+
+This document defines repository-wide engineering principles and development conventions.
+
+It applies to the entire monorepo.
+
+Applications and packages may provide their own `AGENTS.md` files with more specific guidance. In such cases, local instructions extend this document rather than replace it.
+
+---
+
 ## Project Overview
 
 Developer Profile Builder is an AI-first SaaS platform for software engineers.
 
-The platform allows users to create, manage and publish professional developer profiles, maintain multiple resume versions and export print-ready resumes.
+The platform enables developers to create, manage and publish professional profiles, maintain multiple resume versions and generate print-ready resumes.
 
-The repository is developed as a production-quality monorepo with a strong focus on maintainability, scalability and modern engineering practices.
+The repository is developed as a production-quality monorepo with a strong focus on maintainability, scalability and long-term evolution.
 
 ---
 
@@ -19,8 +29,8 @@ The platform is expected to support:
 - user authentication;
 - editable profile sections;
 - multiple resume templates;
-- public profile pages;
 - print-ready PDF generation;
+- public profile pages;
 - cloud synchronization;
 - AI-assisted editing;
 - integrations with third-party developer platforms.
@@ -31,13 +41,23 @@ The platform is expected to support:
 
 This repository follows a pnpm monorepo architecture.
 
-- `apps` contains deployable applications.
-- `packages` contains reusable shared libraries.
-- `docs` contains project documentation.
+### apps
 
-Applications should remain independent while sharing reusable code through packages whenever appropriate.
+Contains deployable applications.
 
-Framework-specific conventions belong to the corresponding application.
+Each application owns its framework-specific implementation while following repository-wide engineering principles.
+
+### packages
+
+Contains reusable libraries shared across multiple applications.
+
+Packages should remain framework-agnostic whenever practical.
+
+### docs
+
+Contains project documentation.
+
+Documentation is considered part of the codebase and should evolve together with the implementation.
 
 ---
 
@@ -49,19 +69,42 @@ Every contribution should prioritize:
 - maintainability over short-term convenience;
 - simplicity over premature abstraction;
 - explicit code over implicit behavior;
-- consistency across the repository.
+- consistency over personal preference.
 
-Avoid introducing abstractions before there is a demonstrated need.
+Prefer solving today's problem well instead of anticipating every possible future requirement.
 
 ---
 
-## Development Philosophy
+## Decision Making
 
-This repository evolves incrementally.
+When multiple implementation options exist, prefer the solution that:
 
-New technologies should be introduced only when they solve an actual problem.
+1. Improves readability.
+2. Preserves consistency.
+3. Minimizes maintenance costs.
+4. Keeps future refactoring simple.
 
-Architecture should grow together with the product rather than anticipating every possible future requirement.
+Avoid introducing new abstractions or dependencies unless they provide clear long-term value.
+
+---
+
+## Repository Evolution
+
+The repository is expected to grow over time.
+
+New applications, packages and infrastructure should integrate into the existing architecture instead of introducing isolated conventions.
+
+Consistency across the repository is more valuable than optimizing individual applications independently.
+
+---
+
+## Documentation
+
+Documentation is part of the implementation.
+
+Whenever architecture, conventions or public APIs change, the corresponding documentation should be updated within the same change.
+
+Documentation should never lag behind the code.
 
 ---
 
@@ -69,43 +112,22 @@ Architecture should grow together with the product rather than anticipating ever
 
 AI tools are treated as engineering assistants rather than autonomous developers.
 
-All AI-generated code must follow repository conventions and be reviewed before being committed.
+AI-generated code should:
 
-Generated changes should remain focused, understandable and production-ready.
+- follow repository conventions;
+- preserve existing architecture;
+- avoid unrelated refactoring;
+- remain production-ready;
+- include explanations for non-trivial design decisions.
 
-AI assistants should preserve existing architecture and avoid unrelated refactoring.
+Generated code should always be reviewed before being committed.
 
-## Decision-Making
-
-When multiple implementation options exist, prefer the solution that:
-
-1. Improves readability.
-2. Keeps the codebase consistent.
-3. Minimizes long-term maintenance costs.
-4. Solves today's problem without overengineering.
-
-Avoid introducing new dependencies or abstractions unless they provide clear long-term value.
-
-## Documentation
-
-Documentation is part of the codebase.
-
-Whenever architecture, conventions or public APIs change, the corresponding documentation should be updated as part of the same change.
-
-Avoid leaving documentation behind the implementation.
-
-## Repository Growth
-
-New applications, packages and infrastructure should integrate naturally into the existing repository structure.
-
-Prefer extending existing conventions over introducing new ones.
-
-Repository consistency is more valuable than individual application preferences.
+---
 
 ## Local Instructions
 
-This document defines repository-wide conventions.
+Applications and packages may provide their own `AGENTS.md` files.
 
-Every application or package may provide its own `AGENTS.md` file with more specific guidance.
+Those documents define framework-specific conventions while inheriting the repository-wide principles described here.
 
-When multiple instruction files exist, always follow the closest applicable document while respecting the repository-wide principles defined here.
+When multiple instruction files exist, always follow the closest applicable document while respecting repository-wide conventions.
