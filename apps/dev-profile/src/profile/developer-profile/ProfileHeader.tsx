@@ -1,6 +1,6 @@
-import type { PersonalInfo } from './profile/types';
+import type { PersonalInfo } from './types';
 import { MapPin } from 'lucide-react';
-import { Contacts } from './Contacts';
+import { Contacts } from '../Contacts';
 
 interface HeroProps {
   personal: PersonalInfo;

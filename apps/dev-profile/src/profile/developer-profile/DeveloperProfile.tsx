@@ -1,17 +1,16 @@
-import type { Profile } from './types';
+import type { DeveloperProfile } from './types';
+import { ProfileHeader } from './ProfileHeader';
+import { Summary } from '@/profile/Summary';
+import { experiences, WorkExperience } from '@/profile/experience';
 import { Section } from '@/shared/ui/Section';
-import { ProfileHeader } from '../ProfileHeader';
-import { Summary } from '../Summary';
 import { Skills } from '@/profile/skills';
-import { Languages } from '../Languages';
-import { WorkExperience } from '@/profile/experience/WorkExperience';
-import { experiences } from '@/profile/experience';
+import { Languages } from '@/profile/Languages';
 
-interface ProfileProps {
-  profile: Profile;
+interface DeveloperProfileProps {
+  profile: DeveloperProfile;
 }
 
-export function Profile({ profile }: ProfileProps) {
+export function DeveloperProfile({ profile }: DeveloperProfileProps) {
   return (
     <div className="space-y-8">
       <ProfileHeader personal={profile.personal} />

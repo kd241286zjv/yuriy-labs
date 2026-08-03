@@ -20,7 +20,7 @@ export interface Language {
   level: 'Native' | 'C2' | 'C1' | 'B2' | 'B1' | 'A2' | 'A1';
 }
 
-export interface Profile {
+export interface DeveloperProfile {
   personal: PersonalInfo;
   summary: string;
   skills: Skill[];

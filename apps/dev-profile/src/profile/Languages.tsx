@@ -1,4 +1,4 @@
-import type { Language } from './profile/types';
+import type { Language } from './developer-profile/types';
 import { Badge } from '@/shared/ui/Badge';
 
 interface LanguagesProps {

@@ -1,7 +1,7 @@
-import type { Profile } from './types';
+import type { DeveloperProfile } from './types';
 import { skillRegistry } from '@/shared/skill/constants';
 
-export const profile: Profile = {
+export const profileData: DeveloperProfile = {
   personal: {
     fullName: 'Yuriy Zharskiy',
     role: 'Senior Fullstack / Frontend Engineer',
@@ -9,15 +9,15 @@ export const profile: Profile = {
     contacts: [
       {
         type: 'github',
-        href: 'https://github.com/...',
+        href: 'https://github.com/kd241286zjv/yuriy-labs',
       },
       {
         type: 'linkedin',
-        href: 'https://linkedin.com/in/...',
+        href: 'https://www.linkedin.com/in/yuriy-zharskiy-699a211a7/',
       },
       {
         type: 'email',
-        href: 'mailto:yuriy@example.com',
+        href: 'mailto:kd241286zjv@gmail.com',
       },
     ],
   },

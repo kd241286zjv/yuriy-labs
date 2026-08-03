@@ -1,5 +1,5 @@
-import type { Contact } from './profile/types';
-import { CONTACTS } from './profile/constants';
+import type { Contact } from './developer-profile/types';
+import { CONTACTS } from './developer-profile/constants';
 
 interface ContactsProps {
   contacts: Contact[];

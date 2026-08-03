@@ -1,5 +1,5 @@
-export { Profile } from './profile/profile.ts';
+export { DeveloperProfile } from './developer-profile';
 
-export { profile } from './profile/profile';
+export { profileData } from './developer-profile/profile-data';
 
-export type { Profile as ProfileModel, PersonalInfo } from './profile/types';
+export type { PersonalInfo } from './developer-profile/types';
