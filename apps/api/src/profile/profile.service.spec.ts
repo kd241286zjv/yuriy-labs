@@ -11,6 +11,7 @@ describe('ProfileService', () => {
     profile: {
       create: jest.fn(),
       findUnique: jest.fn(),
+      update: jest.fn(),
     },
   };
   const service = new ProfileService(prisma as unknown as PrismaService);
@@ -78,5 +79,36 @@ describe('ProfileService', () => {
     await expect(service.findById('missing-profile-id')).rejects.toThrow(
       NotFoundException,
     );
+  });
+
+  it('updates a profile name', async () => {
+    const profile = {
+      id: 'profile-id',
+      name: 'Backend resume',
+      userId: 'user-id',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    prisma.profile.findUnique.mockResolvedValue(profile);
+    prisma.profile.update.mockResolvedValue(profile);
+
+    await expect(
+      service.update('profile-id', { name: 'Backend resume' }),
+    ).resolves.toBe(profile);
+
+    expect(prisma.profile.update).toHaveBeenCalledWith({
+      where: { id: 'profile-id' },
+      data: { name: 'Backend resume' },
+    });
+  });
+
+  it('throws when updating a missing profile', async () => {
+    prisma.profile.findUnique.mockResolvedValue(null);
+
+    await expect(
+      service.update('missing-profile-id', { name: 'Backend resume' }),
+    ).rejects.toThrow(NotFoundException);
+
+    expect(prisma.profile.update).not.toHaveBeenCalled();
   });
 });
