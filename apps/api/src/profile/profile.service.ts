@@ -8,7 +8,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByUserId(userId: string) {
+  findByUserId(userId: string) {
     return this.prisma.profile.findMany({
       where: {
         userId,

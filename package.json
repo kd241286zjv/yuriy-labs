@@ -7,9 +7,9 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "prepare": "husky",
-    "lint": "eslint .",
+    "lint": "eslint apps/*/src",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "typecheck": "turbo typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
