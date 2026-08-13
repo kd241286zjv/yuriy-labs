@@ -3,5 +3,5 @@ interface SummaryProps {
 }
 
 export function Summary({ summary }: SummaryProps) {
-  return <p>{summary}</p>;
+  return <p className="whitespace-pre-line">{summary}</p>;
 }

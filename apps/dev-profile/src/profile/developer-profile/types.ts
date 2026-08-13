@@ -13,6 +13,7 @@ export type ContactType = 'email' | 'github' | 'linkedin';
 export interface Contact {
   type: ContactType;
   href: string;
+  name: string;
 }
 
 export interface Language {

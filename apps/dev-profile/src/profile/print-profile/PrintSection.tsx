@@ -6,10 +6,11 @@ interface PrintSectionProps extends PropsWithChildren {
 
 export function PrintSection({ title, children }: PrintSectionProps) {
   return (
-    <section>
+    <section className="break-inside-avoid">
       <h2
         className="
           border-b
+          mt-3
           border-slate-200
           pb-1
           text-base
