@@ -46,6 +46,10 @@ jobs:
 
       - name: Test API
         run: pnpm --filter api test
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          JWT_SECRET: test-secret-that-is-at-least-32-characters-long
+          CORS_ORIGIN: http://localhost:3000
 
       - name: Build
         run: pnpm build
