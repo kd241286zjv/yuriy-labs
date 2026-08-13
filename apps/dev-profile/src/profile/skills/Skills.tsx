@@ -1,7 +1,8 @@
 import type { Skill, SkillCategory } from '@/shared/skill';
-import { categoryTitles } from './constants';
+import { categoryTitles } from '@/shared/skill';
 
 import { SkillCategory as SkillCategoryComponent } from './SkillCategory';
+import { groupSkills } from '@/shared/skill/utils.ts';
 
 interface SkillsProps {
   skills: Skill[];
@@ -19,18 +20,7 @@ const categoryOrder: SkillCategory[] = [
 ];
 
 export function Skills({ skills }: SkillsProps) {
-  const groupedSkills = skills.reduce(
-    (groups, skill) => {
-      if (!groups[skill.category]) {
-        groups[skill.category] = [];
-      }
-
-      groups[skill.category].push(skill);
-
-      return groups;
-    },
-    {} as Record<SkillCategory, Skill[]>,
-  );
+  const groupedSkills = groupSkills(skills);
 
   Object.values(groupedSkills).forEach((skills) => {
     skills.sort((a, b) => a.priority - b.priority);

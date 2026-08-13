@@ -5,6 +5,7 @@ export interface Skill {
   name: string;
   category: SkillCategory;
   priority: number;
+  visibleInPDF?: boolean;
 }
 
 export type SkillCategory =
@@ -18,3 +19,7 @@ export type SkillCategory =
   | 'ai';
 
 export type SkillId = keyof typeof skillRegistry;
+
+export { skillRegistry, categoryTitles, categoryOrder } from './constants';
+
+export { groupSkills } from './utils';
