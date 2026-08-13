@@ -1,7 +1,9 @@
 import type { DeveloperProfileModel } from '@/profile/developer-profile';
-
 import { PrintHeader } from './PrintHeader';
-import { PrintSection } from '@/profile/print-profile/PrintSection.tsx';
+import { PrintSection } from './PrintSection';
+import { PrintSummary } from './PrintSummary';
+import { PrintExperience } from './PrintExperience';
+import { experiences } from '@/profile/experience';
 
 interface PrintProfileProps {
   profile: DeveloperProfileModel;
@@ -22,10 +24,20 @@ export function PrintProfile({ profile }: PrintProfileProps) {
         py-[12mm]
       "
     >
-      <PrintHeader personal={profile.personal} />
+      <PrintHeader personal={profile.personal} languages={profile.languages} />
 
       <PrintSection title="Summary">
-        <p className="text-sm leading-relaxed text-slate-800">{profile.summary}</p>
+        <PrintSummary summary={profile.summary} />
+      </PrintSection>
+
+      <PrintSection title="Experience">
+        <PrintExperience experiences={experiences} />
+      </PrintSection>
+
+      <PrintSection title="Core Technologies">
+        <p className="max-w-[100mm] text-sm leading-6 text-slate-700">
+          {profile.skills.map(({ name }) => name).join(' • ')}
+        </p>
       </PrintSection>
     </main>
   );

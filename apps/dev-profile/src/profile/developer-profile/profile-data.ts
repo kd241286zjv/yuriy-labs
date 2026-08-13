@@ -9,26 +9,44 @@ export const profileData: DeveloperProfile = {
     contacts: [
       {
         type: 'github',
+        name: 'GitHub',
         href: 'https://github.com/kd241286zjv/yuriy-labs',
       },
       {
         type: 'linkedin',
+        name: 'LinkedIn',
         href: 'https://www.linkedin.com/in/yuriy-zharskiy-699a211a7/',
       },
       {
         type: 'email',
+        name: 'Email',
         href: 'mailto:kd241286zjv@gmail.com',
       },
     ],
   },
-  summary:
-    'Senior Fullstack / Frontend Engineer with 8+ years of experience building enterprise applications using Vue.js, React, TypeScript and NestJS. Passionate about architecture, developer experience and modern frontend tooling.',
-  skills: Object.values(skillRegistry),
+  summary: `Senior Fullstack / Frontend Engineer with 8+ years of experience building scalable enterprise web applications using Vue.js, React, TypeScript and NestJS.
+
+  Designed frontend architectures from scratch, modernized legacy applications, mentored engineers and led frontend teams across enterprise projects. Focused on building maintainable software, reusable UI systems and efficient engineering workflows.`,
+  skills: [
+    skillRegistry.vue3,
+    skillRegistry.react,
+    skillRegistry.typescript,
+    skillRegistry.nuxt,
+    skillRegistry.tailwind,
+    skillRegistry.storybook,
+
+    skillRegistry.nestjs,
+    skillRegistry.nodejs,
+    skillRegistry.restApi,
+
+    skillRegistry.vitest,
+    skillRegistry.playwright,
+
+    skillRegistry.git,
+    skillRegistry.pnpm,
+    skillRegistry.docker,
+  ],
   languages: [
-    {
-      name: 'Russian',
-      level: 'Native',
-    },
     {
       name: 'English',
       level: 'C1',
@@ -36,6 +54,10 @@ export const profileData: DeveloperProfile = {
     {
       name: 'Spanish',
       level: 'B1',
+    },
+    {
+      name: 'Russian',
+      level: 'Native',
     },
   ],
 };
