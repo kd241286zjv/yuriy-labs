@@ -15,6 +15,20 @@ export class ProfileService {
     });
   }
 
+  async findById(profileId: string) {
+    const profile = await this.prisma.profile.findUnique({
+      where: {
+        id: profileId,
+      },
+    });
+
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+
+    return profile;
+  }
+
   async create(userId: string, createProfileDto: CreateProfileDto) {
     const user = await this.prisma.user.findUnique({
       where: {
