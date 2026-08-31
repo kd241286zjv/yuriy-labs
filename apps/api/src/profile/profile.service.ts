@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
@@ -8,15 +12,17 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findByUserId(userId: string) {
+  findByUserId(userId: string, authenticatedUserId: string) {
+    this.ensureUserAccess(userId, authenticatedUserId);
+
     return this.prisma.profile.findMany({
       where: {
-        userId,
+        userId: authenticatedUserId,
       },
     });
   }
 
-  async findById(profileId: string) {
+  async findById(profileId: string, authenticatedUserId: string) {
     const profile = await this.prisma.profile.findUnique({
       where: {
         id: profileId,
@@ -27,11 +33,17 @@ export class ProfileService {
       throw new NotFoundException('Profile not found');
     }
 
+    this.ensureProfileAccess(profile.userId, authenticatedUserId);
+
     return profile;
   }
 
-  async update(profileId: string, updateProfileDto: UpdateProfileDto) {
-    await this.findById(profileId);
+  async update(
+    profileId: string,
+    updateProfileDto: UpdateProfileDto,
+    authenticatedUserId: string,
+  ) {
+    await this.findById(profileId, authenticatedUserId);
 
     return this.prisma.profile.update({
       where: {
@@ -43,8 +55,8 @@ export class ProfileService {
     });
   }
 
-  async remove(profileId: string) {
-    await this.findById(profileId);
+  async remove(profileId: string, authenticatedUserId: string) {
+    await this.findById(profileId, authenticatedUserId);
 
     return this.prisma.profile.delete({
       where: {
@@ -53,10 +65,16 @@ export class ProfileService {
     });
   }
 
-  async create(userId: string, createProfileDto: CreateProfileDto) {
+  async create(
+    userId: string,
+    createProfileDto: CreateProfileDto,
+    authenticatedUserId: string,
+  ) {
+    this.ensureUserAccess(userId, authenticatedUserId);
+
     const user = await this.prisma.user.findUnique({
       where: {
-        id: userId,
+        id: authenticatedUserId,
       },
     });
 
@@ -67,8 +85,23 @@ export class ProfileService {
     return this.prisma.profile.create({
       data: {
         name: createProfileDto.name,
-        userId,
+        userId: authenticatedUserId,
       },
     });
+  }
+
+  private ensureUserAccess(userId: string, authenticatedUserId: string) {
+    if (userId !== authenticatedUserId) {
+      throw new ForbiddenException('You do not have access to this user');
+    }
+  }
+
+  private ensureProfileAccess(
+    profileUserId: string,
+    authenticatedUserId: string,
+  ) {
+    if (profileUserId !== authenticatedUserId) {
+      throw new ForbiddenException('You do not have access to this profile');
+    }
   }
 }
