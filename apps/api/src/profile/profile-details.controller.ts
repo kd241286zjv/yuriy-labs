@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileService } from './profile.service';
@@ -18,5 +18,10 @@ export class ProfileDetailsController {
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
     return this.profileService.update(profileId, updateProfileDto);
+  }
+
+  @Delete(':profileId')
+  remove(@Param('profileId') profileId: string) {
+    return this.profileService.remove(profileId);
   }
 }

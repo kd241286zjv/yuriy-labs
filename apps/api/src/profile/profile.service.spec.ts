@@ -10,6 +10,7 @@ describe('ProfileService', () => {
     },
     profile: {
       create: jest.fn(),
+      delete: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
     },
@@ -110,5 +111,33 @@ describe('ProfileService', () => {
     ).rejects.toThrow(NotFoundException);
 
     expect(prisma.profile.update).not.toHaveBeenCalled();
+  });
+
+  it('deletes a profile', async () => {
+    const profile = {
+      id: 'profile-id',
+      name: 'Frontend resume',
+      userId: 'user-id',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    prisma.profile.findUnique.mockResolvedValue(profile);
+    prisma.profile.delete.mockResolvedValue(profile);
+
+    await expect(service.remove('profile-id')).resolves.toBe(profile);
+
+    expect(prisma.profile.delete).toHaveBeenCalledWith({
+      where: { id: 'profile-id' },
+    });
+  });
+
+  it('throws when deleting a missing profile', async () => {
+    prisma.profile.findUnique.mockResolvedValue(null);
+
+    await expect(service.remove('missing-profile-id')).rejects.toThrow(
+      NotFoundException,
+    );
+
+    expect(prisma.profile.delete).not.toHaveBeenCalled();
   });
 });
