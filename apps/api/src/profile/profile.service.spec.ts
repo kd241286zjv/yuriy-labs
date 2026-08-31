@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 import type { PrismaService } from '../prisma/prisma.service';
 import { ProfileService } from './profile.service';
@@ -11,6 +11,7 @@ describe('ProfileService', () => {
     profile: {
       create: jest.fn(),
       delete: jest.fn(),
+      findMany: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
     },
@@ -33,7 +34,7 @@ describe('ProfileService', () => {
     prisma.profile.create.mockResolvedValue(profile);
 
     await expect(
-      service.create('user-id', { name: 'Frontend resume' }),
+      service.create('user-id', { name: 'Frontend resume' }, 'user-id'),
     ).resolves.toBe(profile);
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({
@@ -51,7 +52,11 @@ describe('ProfileService', () => {
     prisma.user.findUnique.mockResolvedValue(null);
 
     await expect(
-      service.create('missing-user-id', { name: 'Frontend resume' }),
+      service.create(
+        'missing-user-id',
+        { name: 'Frontend resume' },
+        'missing-user-id',
+      ),
     ).rejects.toThrow(NotFoundException);
 
     expect(prisma.profile.create).not.toHaveBeenCalled();
@@ -67,7 +72,9 @@ describe('ProfileService', () => {
     };
     prisma.profile.findUnique.mockResolvedValue(profile);
 
-    await expect(service.findById('profile-id')).resolves.toBe(profile);
+    await expect(service.findById('profile-id', 'user-id')).resolves.toBe(
+      profile,
+    );
 
     expect(prisma.profile.findUnique).toHaveBeenCalledWith({
       where: { id: 'profile-id' },
@@ -77,9 +84,9 @@ describe('ProfileService', () => {
   it('throws when the profile does not exist', async () => {
     prisma.profile.findUnique.mockResolvedValue(null);
 
-    await expect(service.findById('missing-profile-id')).rejects.toThrow(
-      NotFoundException,
-    );
+    await expect(
+      service.findById('missing-profile-id', 'user-id'),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('updates a profile name', async () => {
@@ -94,7 +101,7 @@ describe('ProfileService', () => {
     prisma.profile.update.mockResolvedValue(profile);
 
     await expect(
-      service.update('profile-id', { name: 'Backend resume' }),
+      service.update('profile-id', { name: 'Backend resume' }, 'user-id'),
     ).resolves.toBe(profile);
 
     expect(prisma.profile.update).toHaveBeenCalledWith({
@@ -107,7 +114,11 @@ describe('ProfileService', () => {
     prisma.profile.findUnique.mockResolvedValue(null);
 
     await expect(
-      service.update('missing-profile-id', { name: 'Backend resume' }),
+      service.update(
+        'missing-profile-id',
+        { name: 'Backend resume' },
+        'user-id',
+      ),
     ).rejects.toThrow(NotFoundException);
 
     expect(prisma.profile.update).not.toHaveBeenCalled();
@@ -124,7 +135,9 @@ describe('ProfileService', () => {
     prisma.profile.findUnique.mockResolvedValue(profile);
     prisma.profile.delete.mockResolvedValue(profile);
 
-    await expect(service.remove('profile-id')).resolves.toBe(profile);
+    await expect(service.remove('profile-id', 'user-id')).resolves.toBe(
+      profile,
+    );
 
     expect(prisma.profile.delete).toHaveBeenCalledWith({
       where: { id: 'profile-id' },
@@ -134,10 +147,81 @@ describe('ProfileService', () => {
   it('throws when deleting a missing profile', async () => {
     prisma.profile.findUnique.mockResolvedValue(null);
 
-    await expect(service.remove('missing-profile-id')).rejects.toThrow(
-      NotFoundException,
+    await expect(
+      service.remove('missing-profile-id', 'user-id'),
+    ).rejects.toThrow(NotFoundException);
+
+    expect(prisma.profile.delete).not.toHaveBeenCalled();
+  });
+
+  it('returns profiles only for the authenticated user', async () => {
+    const profiles = [{ id: 'profile-id', userId: 'user-id' }];
+    prisma.profile.findMany.mockResolvedValue(profiles);
+
+    await expect(service.findByUserId('user-id', 'user-id')).resolves.toBe(
+      profiles,
     );
 
+    expect(prisma.profile.findMany).toHaveBeenCalledWith({
+      where: { userId: 'user-id' },
+    });
+  });
+
+  it('rejects access to another user profile list', () => {
+    expect(() => service.findByUserId('other-user-id', 'user-id')).toThrow(
+      ForbiddenException,
+    );
+
+    expect(prisma.profile.findMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects creating a profile for another user', async () => {
+    await expect(
+      service.create('other-user-id', { name: 'Frontend resume' }, 'user-id'),
+    ).rejects.toThrow(ForbiddenException);
+
+    expect(prisma.user.findUnique).not.toHaveBeenCalled();
+    expect(prisma.profile.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects access to another user profile while preserving missing profile 404s', async () => {
+    prisma.profile.findUnique.mockResolvedValue({
+      id: 'profile-id',
+      name: 'Frontend resume',
+      userId: 'other-user-id',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    await expect(service.findById('profile-id', 'user-id')).rejects.toThrow(
+      ForbiddenException,
+    );
+
+    prisma.profile.findUnique.mockResolvedValue(null);
+
+    await expect(
+      service.findById('missing-profile-id', 'user-id'),
+    ).rejects.toThrow(NotFoundException);
+  });
+
+  it('does not update or delete another user profile', async () => {
+    const otherUserProfile = {
+      id: 'profile-id',
+      name: 'Frontend resume',
+      userId: 'other-user-id',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    prisma.profile.findUnique.mockResolvedValue(otherUserProfile);
+
+    await expect(
+      service.update('profile-id', { name: 'Backend resume' }, 'user-id'),
+    ).rejects.toThrow(ForbiddenException);
+    await expect(service.remove('profile-id', 'user-id')).rejects.toThrow(
+      ForbiddenException,
+    );
+
+    expect(prisma.profile.update).not.toHaveBeenCalled();
     expect(prisma.profile.delete).not.toHaveBeenCalled();
   });
 });
