@@ -43,6 +43,16 @@ export class ProfileService {
     });
   }
 
+  async remove(profileId: string) {
+    await this.findById(profileId);
+
+    return this.prisma.profile.delete({
+      where: {
+        id: profileId,
+      },
+    });
+  }
+
   async create(userId: string, createProfileDto: CreateProfileDto) {
     const user = await this.prisma.user.findUnique({
       where: {
